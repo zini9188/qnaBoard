@@ -1,6 +1,6 @@
 package com.qnaBoard.member.entity;
 
-import com.qnaBoard.post.entity.Post;
+import com.qnaBoard.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +20,7 @@ public class Member {
     private Long memberId;
     @Column(length = 30, nullable = false, unique = true, updatable = false)
     private String email;
-    @Column(length = 15, nullable = false, unique = true)
+    @Column(length = 15, nullable = false)
     private String nickname;
     @Column(length = 12, nullable = false)
     private String username;
@@ -29,17 +29,17 @@ public class Member {
     @Column(nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
     @OneToMany(mappedBy = "member")
-    private List<Post> posts = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>();
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public void addPost(Post post) {
-        if (!posts.contains(post)) {
-            posts.add(post);
+    public void addPost(Question question) {
+        if (!questions.contains(question)) {
+            questions.add(question);
         }
     }
 
-    private enum MemberStatus {
+    public enum MemberStatus {
         MEMBER_ACTIVE("ACTIVE"),
         MEMBER_DISABLE("DISABLE");
         private final String status;
