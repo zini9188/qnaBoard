@@ -1,4 +1,4 @@
-package com.qnaBoard.post.entity;
+package com.qnaBoard.question.entity;
 
 import com.qnaBoard.answer.entity.Answer;
 import com.qnaBoard.member.entity.Member;
@@ -13,16 +13,16 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Post {
+public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
+    private Long questionId;
     @Column(nullable = false, length = 40)
     private String title;
     @Column(nullable = false, length = 60)
     private String content;
     @Enumerated(EnumType.STRING)
-    private PostStatus postStatus = PostStatus.QUESTION_REGISTRATION;
+    private QuestionStatus questionStatus = QuestionStatus.QUESTION_REGISTRATION;
     @Enumerated(EnumType.STRING)
     private Access access = Access.PUBLIC;
     @Column(nullable = false)
@@ -36,13 +36,19 @@ public class Post {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    public enum PostStatus {
+    public void addMember(Member member) {
+        if (this.member != member) {
+            this.member = member;
+        }
+    }
+
+    public enum QuestionStatus {
         QUESTION_REGISTRATION("질문 등록"),
         QUESTION_ANSWERED("답변 완료"),
         QUESTION_DELETE("질문 삭제");
         private String status;
 
-        PostStatus(String status) {
+        QuestionStatus(String status) {
             this.status = status;
         }
     }
