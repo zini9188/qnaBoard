@@ -1,4 +1,4 @@
-package com.qnaBoard.post.entity;
+package com.qnaBoard.question.entity;
 
 import com.qnaBoard.member.entity.Member;
 import lombok.Getter;
@@ -8,11 +8,11 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "LIKES")
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostLike {
+public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
@@ -20,8 +20,8 @@ public class PostLike {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
     @ManyToOne
-    @JoinColumn(name = "POST_ID")
-    private Post post;
+    @JoinColumn(name = "QUESTION_ID")
+    private Question question;
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public void addMember(Member member) {
@@ -30,9 +30,9 @@ public class PostLike {
         }
     }
 
-    public void addPost(Post post) {
-        if (this.post != post) {
-            this.post = post;
+    public void addQuestion(Question question) {
+        if (this.question != question) {
+            this.question = question;
         }
     }
 }

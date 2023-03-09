@@ -1,17 +1,15 @@
 package com.qnaBoard.question.mapper;
 
 import com.qnaBoard.member.entity.Member;
-import com.qnaBoard.question.dto.QuestionPatchDto;
-import com.qnaBoard.question.dto.QuestionResponseDto;
+import com.qnaBoard.question.dto.QuestionDto;
 import com.qnaBoard.question.entity.Question;
-import com.qnaBoard.question.dto.QuestionPostDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
-    default Question questionPostDtoToQuestion(QuestionPostDto questionPostDto) {
+    default Question questionPostDtoToQuestion(QuestionDto.Post questionPostDto) {
         if (questionPostDto == null) {
             return null;
         }
@@ -27,7 +25,7 @@ public interface QuestionMapper {
         return question;
     }
 
-    default Question questionPatchDtoToQuestion(QuestionPatchDto questionPatchDto, long questionId){
+    default Question questionPatchDtoToQuestion(QuestionDto.Patch questionPatchDto, long questionId) {
         if (questionPatchDto == null) {
             return null;
         }
@@ -43,19 +41,20 @@ public interface QuestionMapper {
 
         return question;
     }
-    default QuestionResponseDto questionToQuestionResponseDto(Question question) {
+
+    default QuestionDto.Response questionToQuestionDtoResponse(Question question) {
         if (question == null) {
             return null;
         }
-        Long questionId = question.getQuestionId();
-        String title = question.getTitle();
-        String content = question.getContent();
-        Question.QuestionStatus questionStatus = question.getQuestionStatus();
-        String username = question.getMember().getUsername();
-        Integer views = question.getView();
-        Question.Access access = question.getAccess();
-        QuestionResponseDto questionResponseDto = new QuestionResponseDto(questionId, title, content, username, views, questionStatus, access);
-        return questionResponseDto;
+        return new QuestionDto.Response(
+                question.getQuestionId(),
+                question.getTitle(),
+                question.getContent(),
+                question.getMember().getUsername(),
+                question.getView(),
+                question.getQuestionStatus().getStatus(),
+                question.getAccess().getStatus());
     }
-    List<QuestionResponseDto> questionsToQuestionResponseDtos(List<Question> questions);
+
+    List<QuestionDto.Response> questionsToQuestionDtoResponses(List<Question> questions);
 }

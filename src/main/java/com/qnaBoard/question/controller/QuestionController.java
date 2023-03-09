@@ -1,22 +1,26 @@
 package com.qnaBoard.question.controller;
 
-import com.qnaBoard.question.dto.QuestionPatchDto;
-import com.qnaBoard.question.dto.QuestionPostDto;
+import com.qnaBoard.dto.MultiResponseDto;
+import com.qnaBoard.dto.SingleResponseDto;
+import com.qnaBoard.question.dto.QuestionDto;
 import com.qnaBoard.question.entity.Question;
 import com.qnaBoard.question.mapper.QuestionMapper;
 import com.qnaBoard.question.service.QuestionService;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/questions")
 public class QuestionController {
-    private QuestionService questionService;
-    private QuestionMapper questionMapper;
+    private final QuestionService questionService;
+    private final QuestionMapper questionMapper;
+    private final String DEFAULT_QUESTION_URI = "/questions";
 
     public QuestionController(QuestionService questionService, QuestionMapper questionMapper) {
         this.questionService = questionService;
@@ -24,29 +28,33 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity postQuestion(@RequestBody QuestionPostDto postDto) {
-        Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(postDto));
-        return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.CREATED);
+    public ResponseEntity postQuestion(@RequestBody QuestionDto.Post postDto) {
+        questionService.createQuestion(questionMapper.questionPostDtoToQuestion(postDto));
+        URI uri = UriComponentsBuilder.newInstance().build(DEFAULT_QUESTION_URI);
+        return ResponseEntity.created(uri).build();
     }
 
     @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
-                                        @RequestBody QuestionPatchDto patchDto) {
+                                        @RequestBody QuestionDto.Patch patchDto) {
         Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(patchDto, questionId));
-
-        return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
+        QuestionDto.Response response = questionMapper.questionToQuestionDtoResponse(question);
+        return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(@PathVariable("question-id") @Positive long questionId) {
         Question question = questionService.findQuestion(questionId);
-        return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
+        QuestionDto.Response response = questionMapper.questionToQuestionDtoResponse(question);
+        return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @GetMapping
-    public ResponseEntity getQuestions() {
-        List<Question> questions = questionService.findQuestions();
-        return new ResponseEntity<>(questionMapper.questionsToQuestionResponseDtos(questions), HttpStatus.OK);
+    public ResponseEntity getQuestions(@RequestParam @Positive int page,
+                                       @RequestParam @Positive int size) {
+        Page<Question> questionPage = questionService.findQuestions(page - 1, size);
+        List<QuestionDto.Response> responses = questionMapper.questionsToQuestionDtoResponses(questionPage.getContent());
+        return ResponseEntity.ok(new MultiResponseDto<>(responses, questionPage));
     }
 
     @DeleteMapping("/{question-id}")

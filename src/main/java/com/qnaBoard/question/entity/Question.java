@@ -46,6 +46,7 @@ public class Question {
         QUESTION_REGISTRATION("질문 등록"),
         QUESTION_ANSWERED("답변 완료"),
         QUESTION_DELETE("질문 삭제");
+        @Getter
         private String status;
 
         QuestionStatus(String status) {
@@ -56,6 +57,7 @@ public class Question {
     public enum Access {
         PUBLIC("공개"),
         SECRET("비공개");
+        @Getter
         private final String status;
 
         Access(String status) {

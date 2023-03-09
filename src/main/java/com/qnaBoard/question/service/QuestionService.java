@@ -5,6 +5,8 @@ import com.qnaBoard.member.service.MemberService;
 import com.qnaBoard.question.entity.Question;
 import com.qnaBoard.question.repository.QuestionRepository;
 import com.sun.xml.bind.v2.TODO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,15 +46,15 @@ public class QuestionService {
         return questionRepository.save(findQuestion);
     }
 
-    public Question findQuestion(long questionId){
+    public Question findQuestion(long questionId) {
         return findVerifyQuestion(questionId);
     }
 
-    public List<Question> findQuestions(){
-        return questionRepository.findAll();
+    public Page<Question> findQuestions(int page, int size) {
+        return questionRepository.findAll(PageRequest.of(page, size));
     }
 
-    public void deleteQuestion(long questionId){
+    public void deleteQuestion(long questionId) {
         Question findQuestion = findVerifyQuestion(questionId);
         findQuestion.setQuestionStatus(Question.QuestionStatus.QUESTION_DELETE);
         questionRepository.save(findQuestion);

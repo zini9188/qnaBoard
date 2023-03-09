@@ -2,6 +2,8 @@ package com.qnaBoard.answer.service;
 
 import com.qnaBoard.answer.entity.Answer;
 import com.qnaBoard.answer.repository.AnswerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,28 +17,28 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public Answer createAnswer(Answer answer){
+    public Answer createAnswer(Answer answer) {
         return answerRepository.save(answer);
     }
 
-    public Answer updateAnswer(Answer answer){
+    public Answer updateAnswer(Answer answer) {
         return answerRepository.save(answer);
     }
 
-    public Answer getAnswer(long answerId){
+    public Answer getAnswer(long answerId) {
         return findVerifyAnswer(answerId);
     }
 
-    public List<Answer> getAnswers(){
-        return answerRepository.findAll();
+    public Page<Answer> getAnswers(int page, int size) {
+        return answerRepository.findAll(PageRequest.of(page, size));
     }
 
-    public void deleteAnswer(long answerId){
+    public void deleteAnswer(long answerId) {
         Answer answer = findVerifyAnswer(answerId);
         answerRepository.delete(answer);
     }
 
-    public Answer findVerifyAnswer(long answerId){
+    public Answer findVerifyAnswer(long answerId) {
         Optional<Answer> findAnswer = answerRepository.findById(answerId);
         return findAnswer.orElse(null);
     }
