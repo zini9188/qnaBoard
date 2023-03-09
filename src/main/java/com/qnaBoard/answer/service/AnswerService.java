@@ -2,11 +2,12 @@ package com.qnaBoard.answer.service;
 
 import com.qnaBoard.answer.entity.Answer;
 import com.qnaBoard.answer.repository.AnswerRepository;
+import com.qnaBoard.exception.CustomException;
+import com.qnaBoard.exception.ExceptionCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +19,7 @@ public class AnswerService {
     }
 
     public Answer createAnswer(Answer answer) {
+        verifyExistAnswer(answer.getQuestionId());
         return answerRepository.save(answer);
     }
 
@@ -34,12 +36,18 @@ public class AnswerService {
     }
 
     public void deleteAnswer(long answerId) {
-        Answer answer = findVerifyAnswer(answerId);
-        answerRepository.delete(answer);
+        answerRepository.delete(findVerifyAnswer(answerId));
+    }
+
+    private void verifyExistAnswer(long questionId) {
+        Optional<Answer> answer = answerRepository.findByQuestionId(questionId);
+        if (answer.isPresent())
+            throw new CustomException(ExceptionCode.ANSWER_EXIST);
     }
 
     public Answer findVerifyAnswer(long answerId) {
         Optional<Answer> findAnswer = answerRepository.findById(answerId);
-        return findAnswer.orElse(null);
+        return findAnswer.orElseThrow(() ->
+                new CustomException(ExceptionCode.ANSWER_NOT_FOUND));
     }
 }

@@ -33,7 +33,7 @@ public class Member {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public void addPost(Question question) {
+    public void addQuestion(Question question) {
         if (!questions.contains(question)) {
             questions.add(question);
         }

@@ -1,5 +1,7 @@
 package com.qnaBoard.member.service;
 
+import com.qnaBoard.exception.CustomException;
+import com.qnaBoard.exception.ExceptionCode;
 import com.qnaBoard.member.entity.Member;
 import com.qnaBoard.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ public class MemberService {
     }
 
     public Member createMember(Member member) {
+        verifyExistMember(member.getEmail());
         return memberRepository.save(member);
     }
 
@@ -34,8 +37,7 @@ public class MemberService {
     }
 
     public Member findMember(long memberId) {
-        Member findMember = findVerifyMember(memberId);
-        return findMember;
+        return findVerifyMember(memberId);
     }
 
     public Page<Member> findMembers(int page, int size) {
@@ -48,9 +50,15 @@ public class MemberService {
         memberRepository.save(findMember);
     }
 
+    private void verifyExistMember(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent())
+            throw new CustomException(ExceptionCode.MEMBER_EXIST);
+    }
+
     public Member findVerifyMember(long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
-        //TODO: 예외 처리 추가 작성
-        return member.orElse(null);
+        return member.orElseThrow(() ->
+                new CustomException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 }
