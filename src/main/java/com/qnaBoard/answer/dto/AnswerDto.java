@@ -33,6 +33,5 @@ public class AnswerDto {
         private String content;
         private Question.Access access;
         private LocalDateTime createdAt;
-        private Question question;
     }
 }

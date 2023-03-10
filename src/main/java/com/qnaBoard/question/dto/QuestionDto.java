@@ -1,5 +1,6 @@
 package com.qnaBoard.question.dto;
 
+import com.qnaBoard.answer.entity.Answer;
 import com.qnaBoard.question.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,5 +39,6 @@ public class QuestionDto {
         private Integer views;
         private String questionStatus;
         private String access;
+        private Answer answer;
     }
 }

@@ -22,6 +22,4 @@ public class Answer {
     private String content;
     private Question.Access access;
     private LocalDateTime createdAt = LocalDateTime.now();
-    @OneToOne(mappedBy = "answer", cascade = CascadeType.ALL)
-    private Question question;
 }
