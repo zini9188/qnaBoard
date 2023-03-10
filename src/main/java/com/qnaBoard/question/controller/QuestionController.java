@@ -15,12 +15,13 @@ import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
+import static com.qnaBoard.utils.constant.Constant.DEFAULT_QUESTION_URI;
+
 @RestController
 @RequestMapping("/questions")
 public class QuestionController {
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
-    private final String DEFAULT_QUESTION_URI = "/questions";
 
     public QuestionController(QuestionService questionService, QuestionMapper questionMapper) {
         this.questionService = questionService;

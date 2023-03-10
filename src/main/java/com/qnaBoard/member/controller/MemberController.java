@@ -17,13 +17,14 @@ import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
+import static com.qnaBoard.utils.constant.Constant.DEFAULT_MEMBER_URI;
+
 @RestController
 @Validated
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
-    private final String DEFAULT_MEMBER_URI = "/members";
 
     public MemberController(MemberService memberService, MemberMapper memberMapper) {
         this.memberService = memberService;

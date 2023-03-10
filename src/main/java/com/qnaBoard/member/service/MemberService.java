@@ -56,7 +56,7 @@ public class MemberService {
             throw new CustomException(ExceptionCode.MEMBER_EXIST);
     }
 
-    public Member findVerifyMember(long memberId) {
+    private Member findVerifyMember(long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         return member.orElseThrow(() ->
                 new CustomException(ExceptionCode.MEMBER_NOT_FOUND));

@@ -1,5 +1,7 @@
 package com.qnaBoard.question.service;
 
+import com.qnaBoard.answer.entity.Answer;
+import com.qnaBoard.answer.service.AnswerService;
 import com.qnaBoard.exception.CustomException;
 import com.qnaBoard.exception.ExceptionCode;
 import com.qnaBoard.member.entity.Member;
@@ -14,10 +16,11 @@ import java.util.Optional;
 
 @Service
 public class QuestionService {
-    private QuestionRepository questionRepository;
-    private MemberService memberService;
+    private final QuestionRepository questionRepository;
+    private final MemberService memberService;
 
-    public QuestionService(QuestionRepository questionRepository, MemberService memberService) {
+    public QuestionService(QuestionRepository questionRepository,
+                           MemberService memberService) {
         this.questionRepository = questionRepository;
         this.memberService = memberService;
     }
@@ -39,6 +42,8 @@ public class QuestionService {
                 .ifPresent(findQuestion::setAccess);
         Optional.ofNullable(question.getQuestionStatus())
                 .ifPresent(findQuestion::setQuestionStatus);
+        Optional.ofNullable(question.getAnswer())
+                .ifPresent(findQuestion::setAnswer);
         return questionRepository.save(findQuestion);
     }
 
@@ -56,13 +61,35 @@ public class QuestionService {
         questionRepository.save(findQuestion);
     }
 
-    public void verifyQuestion(Question question) {
-        Member member = memberService.findVerifyMember(question.getMember().getMemberId());
+    private void verifyQuestion(Question question) {
+        Member member = memberService.findMember(question.getMember().getMemberId());
+        isEqualWriter(question.getMember().getMemberId(), member.getMemberId());
+        isDeleted(question.getQuestionStatus());
+        isAnswered(question.getQuestionStatus());
         member.addQuestion(question);
         question.addMember(member);
     }
 
-    public Question findVerifyQuestion(long questionId) {
+    private static void isAnswered(Question.QuestionStatus questionStatus) {
+        if (questionStatus.equals(Question.QuestionStatus.QUESTION_ANSWERED)) {
+            throw new CustomException(ExceptionCode.ANSWERED_QUESTION);
+        }
+    }
+
+    private static void isDeleted(Question.QuestionStatus questionStatus) {
+        if (questionStatus.equals(Question.QuestionStatus.QUESTION_DELETE)) {
+            throw new CustomException(ExceptionCode.DELETED_QUESTION);
+        }
+    }
+
+    private static void isEqualWriter(long questionId, long memberId) {
+        // TODO Spring Security 적용 이후 변경
+        if (questionId != memberId) {
+            throw new CustomException(ExceptionCode.NOT_AUTHOR_QUESTION);
+        }
+    }
+
+    private Question findVerifyQuestion(long questionId) {
         Optional<Question> question = questionRepository.findById(questionId);
         return question.orElseThrow(() ->
                 new CustomException(ExceptionCode.QUESTION_NOT_FOUND));

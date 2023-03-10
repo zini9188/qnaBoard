@@ -23,10 +23,6 @@ public class QuestionDto {
         private String title;
         private String content;
         private Question.Access access;
-
-        public void setQuestionId(Long questionId) {
-            this.questionId = questionId;
-        }
     }
 
     @Getter

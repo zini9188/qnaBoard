@@ -42,6 +42,7 @@ public class Member {
     public enum MemberStatus {
         MEMBER_ACTIVE("ACTIVE"),
         MEMBER_DISABLE("DISABLE");
+        @Getter
         private final String status;
 
         MemberStatus(String status) {

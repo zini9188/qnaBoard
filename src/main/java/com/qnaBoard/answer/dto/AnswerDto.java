@@ -4,7 +4,6 @@ import com.qnaBoard.question.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 public class AnswerDto {

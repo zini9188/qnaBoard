@@ -47,7 +47,7 @@ public class Question {
         QUESTION_ANSWERED("답변 완료"),
         QUESTION_DELETE("질문 삭제");
         @Getter
-        private String status;
+        private final String status;
 
         QuestionStatus(String status) {
             this.status = status;
