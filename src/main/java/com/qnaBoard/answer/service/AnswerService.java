@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.qnaBoard.utils.constant.Constant.DEFAULT_ADMIN_EMAIL;
+
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
@@ -25,10 +27,8 @@ public class AnswerService {
 
     public Answer createAnswer(Answer answer) {
         verifyExistAnswer(answer.getQuestionId());
-        Question question = questionService.findQuestion(answer.getQuestionId());
-        question.setAnswer(answer);
-        answer.setAccess(question.getAccess());
-        questionService.updateQuestion(question);
+        verifyIsAdmin(answer.getEmail());
+        addQuestion(answer);
         return answerRepository.save(answer);
     }
 
@@ -48,10 +48,24 @@ public class AnswerService {
         answerRepository.delete(findVerifyAnswer(answerId));
     }
 
+    private void verifyIsAdmin(String email) {
+        if (!email.equals(DEFAULT_ADMIN_EMAIL)) {
+            throw new CustomException(ExceptionCode.DOES_NOT_ADMIN);
+        }
+    }
+
+    private void addQuestion(Answer answer) {
+        Question question = questionService.findQuestion(answer.getQuestionId());
+        question.setAnswer(answer);
+        answer.setAccess(question.getAccess());
+        questionService.updateQuestion(question);
+    }
+
     private void verifyExistAnswer(long questionId) {
-        Optional<Answer> answer = answerRepository.findByQuestionId(questionId);
-        if (answer.isPresent())
+        Question question = questionService.findQuestion(questionId);
+        if (question.getAnswer() != null) {
             throw new CustomException(ExceptionCode.ANSWER_EXIST);
+        }
     }
 
     private Answer findVerifyAnswer(long answerId) {

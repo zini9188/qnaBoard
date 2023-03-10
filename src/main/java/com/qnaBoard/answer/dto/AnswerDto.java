@@ -11,6 +11,7 @@ public class AnswerDto {
     @AllArgsConstructor
     public static class Post {
         private Long questionId;
+        private String email;
         private String content;
     }
 

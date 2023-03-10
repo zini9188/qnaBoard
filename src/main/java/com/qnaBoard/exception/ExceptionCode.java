@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ExceptionCode {
+    DOES_NOT_ADMIN(406,"관리자만 등록할 수 있습니다."),
     ANSWERED_QUESTION(406, "답변 완료된 질문입니다."),
     DELETED_QUESTION(406, "삭제된 질문입니다."),
     NOT_AUTHOR_QUESTION(406, "해당 글의 작성자가 아닙니다."),
