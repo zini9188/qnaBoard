@@ -32,7 +32,7 @@ public class Question {
     private Integer view = 0;
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ANSWER_ID")
     private Answer answer;
     @ManyToOne
