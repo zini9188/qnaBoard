@@ -32,6 +32,7 @@ public class QuestionDto {
         private String title;
         private String content;
         private String username;
+        private Integer likes;
         private Integer views;
         private String questionStatus;
         private String access;

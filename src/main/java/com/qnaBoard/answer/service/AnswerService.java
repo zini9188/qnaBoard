@@ -49,13 +49,15 @@ public class AnswerService {
     }
 
     private void verifyIsAdmin(String email) {
-        if (!email.equals(DEFAULT_ADMIN_EMAIL)) {
+        if (email == null || !email.equals(DEFAULT_ADMIN_EMAIL)) {
             throw new CustomException(ExceptionCode.DOES_NOT_ADMIN);
         }
     }
 
     private void addQuestion(Answer answer) {
-        Question question = questionService.findQuestion(answer.getQuestionId());
+        Question question = new Question();
+        question.setQuestionId(answer.getQuestionId());
+        question.setQuestionStatus(Question.QuestionStatus.QUESTION_ANSWERED);
         question.setAnswer(answer);
         answer.setAccess(question.getAccess());
         questionService.updateQuestion(question);

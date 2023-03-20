@@ -51,6 +51,7 @@ public interface QuestionMapper {
                 question.getTitle(),
                 question.getContent(),
                 question.getMember().getUsername(),
+                question.getLikes().size(),
                 question.getView(),
                 question.getQuestionStatus().getStatus(),
                 question.getAccess().getStatus(),

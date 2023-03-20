@@ -1,6 +1,7 @@
 package com.qnaBoard.question.entity;
 
 import com.qnaBoard.answer.entity.Answer;
+import com.qnaBoard.like.entity.Like;
 import com.qnaBoard.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -35,6 +38,8 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    private List<Like> likes = new ArrayList<>();
 
     public void addMember(Member member) {
         if (this.member != member) {

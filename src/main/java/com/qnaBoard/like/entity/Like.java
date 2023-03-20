@@ -1,6 +1,7 @@
-package com.qnaBoard.question.entity;
+package com.qnaBoard.like.entity;
 
 import com.qnaBoard.member.entity.Member;
+import com.qnaBoard.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,13 +17,20 @@ public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public static Like of(Member member, Question question) {
+        Like like = new Like();
+        like.addMember(member);
+        like.addQuestion(question);
+        return like;
+    }
 
     public void addMember(Member member) {
         if (this.member != member) {

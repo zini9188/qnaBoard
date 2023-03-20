@@ -1,7 +1,5 @@
 package com.qnaBoard.question.service;
 
-import com.qnaBoard.answer.entity.Answer;
-import com.qnaBoard.answer.service.AnswerService;
 import com.qnaBoard.exception.CustomException;
 import com.qnaBoard.exception.ExceptionCode;
 import com.qnaBoard.member.entity.Member;
@@ -32,6 +30,7 @@ public class QuestionService {
 
     public Question updateQuestion(Question question) {
         Question findQuestion = findVerifyQuestion(question.getQuestionId());
+        isUpdatable(findQuestion.getQuestionStatus());
         Optional.ofNullable(question.getTitle())
                 .ifPresent(findQuestion::setTitle);
         Optional.ofNullable(question.getContent())
@@ -45,6 +44,12 @@ public class QuestionService {
         Optional.ofNullable(question.getAnswer())
                 .ifPresent(findQuestion::setAnswer);
         return questionRepository.save(findQuestion);
+    }
+
+    private void isUpdatable(Question.QuestionStatus questionStatus) {
+        if (!questionStatus.equals(Question.QuestionStatus.QUESTION_REGISTRATION)) {
+            throw new CustomException(ExceptionCode.CANNOT_UPDATE);
+        }
     }
 
     public Question findQuestion(long questionId) {
@@ -69,6 +74,7 @@ public class QuestionService {
         member.addQuestion(question);
         question.addMember(member);
     }
+
 
     private static void isAnswered(Question.QuestionStatus questionStatus) {
         if (questionStatus.equals(Question.QuestionStatus.QUESTION_ANSWERED)) {
