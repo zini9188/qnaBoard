@@ -59,8 +59,8 @@ public class AnswerService {
         question.setQuestionId(answer.getQuestionId());
         question.setQuestionStatus(Question.QuestionStatus.QUESTION_ANSWERED);
         question.setAnswer(answer);
-        answer.setAccess(question.getAccess());
         questionService.updateQuestion(question);
+        answer.setAccess(question.getAccess());
     }
 
     private void verifyExistAnswer(long questionId) {
