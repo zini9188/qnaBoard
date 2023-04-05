@@ -1,4 +1,4 @@
-package com.qnaBoard.utils.constant;
+package com.qnaBoard.utils;
 
 public class Constant {
     public static final String DEFAULT_MEMBER_URI = "/members";
