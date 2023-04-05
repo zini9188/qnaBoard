@@ -41,7 +41,8 @@ public class QuestionService {
                 .ifPresent(findQuestion::setQuestionStatus);
         Optional.ofNullable(question.getAnswer())
                 .ifPresent(findQuestion::setAnswer);
-        question.setAccess(findQuestion.getAccess());
+        Optional.ofNullable(question.getAccess())
+                .ifPresent(findQuestion::setAccess);
         return questionRepository.save(findQuestion);
     }
 

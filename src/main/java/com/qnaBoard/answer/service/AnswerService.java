@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.qnaBoard.utils.constant.Constant.DEFAULT_ADMIN_EMAIL;
+import static com.qnaBoard.utils.Constant.DEFAULT_ADMIN_EMAIL;
 
 @Service
 public class AnswerService {
@@ -33,6 +33,10 @@ public class AnswerService {
     }
 
     public Answer updateAnswer(Answer answer) {
+        verifyIsAdmin(answer.getEmail());
+        Answer findAnswer = findVerifyAnswer(answer.getAnswerId());
+        Optional.ofNullable(findAnswer.getAccess())
+                .ifPresent(answer::setAccess);
         return answerRepository.save(answer);
     }
 
