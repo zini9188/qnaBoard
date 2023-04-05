@@ -15,7 +15,7 @@ import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
-import static com.qnaBoard.utils.constant.Constant.DEFAULT_QUESTION_URI;
+import static com.qnaBoard.utils.Constant.DEFAULT_QUESTION_URI;
 
 @RestController
 @RequestMapping("/questions")

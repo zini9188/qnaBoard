@@ -10,7 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 
-import static com.qnaBoard.utils.constant.Constant.DEFAULT_LIKE_URI;
+import static com.qnaBoard.utils.Constant.DEFAULT_LIKE_URI;
 
 @RestController
 @RequestMapping(DEFAULT_LIKE_URI)
