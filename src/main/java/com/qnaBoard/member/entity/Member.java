@@ -24,7 +24,7 @@ public class Member {
     private String nickname;
     @Column(length = 12, nullable = false)
     private String username;
-    @Column(length = 30, nullable = false)
+    @Column(length = 255, nullable = false)
     private String password;
     @Column(nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
@@ -32,6 +32,9 @@ public class Member {
     private List<Question> questions = new ArrayList<>();
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     public void addQuestion(Question question) {
         if (!questions.contains(question)) {
