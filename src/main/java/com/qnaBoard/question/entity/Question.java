@@ -1,6 +1,7 @@
 package com.qnaBoard.question.entity;
 
 import com.qnaBoard.answer.entity.Answer;
+import com.qnaBoard.entity.BaseEntity;
 import com.qnaBoard.like.entity.Like;
 import com.qnaBoard.member.entity.Member;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Question {
+public class Question extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
@@ -30,8 +31,6 @@ public class Question {
     private Access access = Access.PUBLIC;
     @Column(nullable = false)
     private Integer view = 0;
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ANSWER_ID")
     private Answer answer;

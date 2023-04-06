@@ -1,5 +1,6 @@
 package com.qnaBoard.member.entity;
 
+import com.qnaBoard.entity.BaseEntity;
 import com.qnaBoard.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -30,8 +31,6 @@ public class Member {
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
     @OneToMany(mappedBy = "member")
     private List<Question> questions = new ArrayList<>();
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
