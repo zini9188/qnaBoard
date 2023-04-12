@@ -55,7 +55,9 @@ public interface QuestionMapper {
                 question.getView(),
                 question.getQuestionStatus().getStatus(),
                 question.getAccess().getStatus(),
-                question.getAnswer());
+                question.getAnswer(),
+                question.getCreateAt(),
+                question.getUpdateAt());
     }
 
     List<QuestionDto.Response> questionsToQuestionDtoResponses(List<Question> questions);

@@ -6,6 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ExceptionCode {
+
+    MEMBER_IS_DISABLE(407, "비활성화한 회원입니다."),
     CANNOT_UPDATE(406,"이미 답변이 완료되어 수정할 수 없습니다."),
     DOES_NOT_ADMIN(406,"관리자만 등록할 수 있습니다."),
     ANSWERED_QUESTION(406, "답변 완료된 질문입니다."),
@@ -18,6 +20,7 @@ public enum ExceptionCode {
     LIKE_NOT_FOUND(404, "아직 좋아요를 누르지 않았습니다."),
     QUESTION_NOT_FOUND(404, "존재하지 않는 질문입니다."),
     ANSWER_NOT_FOUND(404, "존재하지 않는 답변입니다.");
+
     private final int status;
     private final String message;
 }

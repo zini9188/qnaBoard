@@ -4,10 +4,12 @@ import com.qnaBoard.exception.CustomException;
 import com.qnaBoard.exception.ExceptionCode;
 import com.qnaBoard.member.entity.Member;
 import com.qnaBoard.member.service.MemberService;
+import com.qnaBoard.question.SortType;
 import com.qnaBoard.question.entity.Question;
 import com.qnaBoard.question.repository.QuestionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -53,11 +55,21 @@ public class QuestionService {
     }
 
     public Question findQuestion(long questionId) {
-        return findVerifyQuestion(questionId);
+        Question findQuestion = findVerifyQuestion(questionId);
+        verifyActiveMember(findQuestion);
+        return findQuestion;
     }
 
-    public Page<Question> findQuestions(int page, int size) {
-        return questionRepository.findAll(PageRequest.of(page, size));
+    private static void verifyActiveMember(Question findQuestion) {
+        if(findQuestion.getMember().getMemberStatus() == Member.MemberStatus.MEMBER_DISABLE){
+            throw new CustomException(ExceptionCode.MEMBER_IS_DISABLE);
+        }
+    }
+
+    public Page<Question> findQuestions(int page, int size, String type) {
+        SortType sortType = SortType.valueOf(type);
+        Sort sort = Sort.by(sortType.getDirection(), sortType.getColumn());
+        return questionRepository.findAllByMember_MemberStatus(PageRequest.of(page, size, sort), Member.MemberStatus.MEMBER_ACTIVE);
     }
 
     public void deleteQuestion(long questionId) {
