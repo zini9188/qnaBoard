@@ -5,6 +5,8 @@ import com.qnaBoard.question.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 public class QuestionDto {
     @Getter
     @AllArgsConstructor
@@ -37,5 +39,7 @@ public class QuestionDto {
         private String questionStatus;
         private String access;
         private Answer answer;
+        private LocalDateTime createAt;
+        private LocalDateTime updateAt;
     }
 }
