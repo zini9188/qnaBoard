@@ -26,8 +26,8 @@ public class AnswerService {
     }
 
     public Answer createAnswer(Answer answer) {
-        verifyExistAnswer(answer.getQuestionId());
         verifyIsAdmin(answer.getEmail());
+        verifyExistAnswer(answer.getQuestionId());
         addQuestion(answer);
         return answerRepository.save(answer);
     }
