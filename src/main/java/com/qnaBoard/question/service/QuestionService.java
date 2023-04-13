@@ -66,7 +66,7 @@ public class QuestionService {
     }
 
     public Page<Question> findQuestions(int page, int size, String type) {
-        Question.SortType sortType = Question.SortType.valueOf(type);
+        Question.SortType sortType = Question.SortType.valueOf(type.toUpperCase().replace("-", "_"));
         Sort sort = Sort.by(sortType.getDirection(), sortType.getColumn());
         return questionRepository.findAllByMember_MemberStatus(PageRequest.of(page, size, sort), Member.MemberStatus.MEMBER_ACTIVE);
     }
