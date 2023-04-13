@@ -26,14 +26,12 @@ public class AnswerService {
     }
 
     public Answer createAnswer(Answer answer) {
-        verifyIsAdmin(answer.getEmail());
         verifyExistAnswer(answer.getQuestionId());
         addQuestion(answer);
         return answerRepository.save(answer);
     }
 
     public Answer updateAnswer(Answer answer) {
-        verifyIsAdmin(answer.getEmail());
         Answer findAnswer = findVerifyAnswer(answer.getAnswerId());
         Optional.ofNullable(findAnswer.getAccess())
                 .ifPresent(answer::setAccess);
@@ -54,12 +52,6 @@ public class AnswerService {
         question.setAnswer(null);
         question.setQuestionStatus(Question.QuestionStatus.QUESTION_REGISTRATION);
         answerRepository.delete(findVerifyAnswer(answerId));
-    }
-
-    private void verifyIsAdmin(String email) {
-        if (email == null || !email.equals(DEFAULT_ADMIN_EMAIL)) {
-            throw new CustomException(ExceptionCode.DOES_NOT_ADMIN);
-        }
     }
 
     private void addQuestion(Answer answer) {

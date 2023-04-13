@@ -25,7 +25,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
-import static com.qnaBoard.utils.constant.Constant.DEFAULT_MEMBER_URI;
+import static com.qnaBoard.utils.Constant.DEFAULT_MEMBER_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;

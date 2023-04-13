@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.GET, "/*/members").hasRole("ADMIN")
                         .antMatchers(HttpMethod.GET, "/*/members/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/*/members/**").hasRole("USER")
+                        .antMatchers("/answers/**").hasRole("ADMIN")
                         .antMatchers("/questions/**").authenticated()
                         .antMatchers("/likes/**").authenticated()
                         .anyRequest().permitAll());
