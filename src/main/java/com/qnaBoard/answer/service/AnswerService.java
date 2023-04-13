@@ -49,6 +49,10 @@ public class AnswerService {
     }
 
     public void deleteAnswer(long answerId) {
+        Answer answer = findVerifyAnswer(answerId);
+        Question question = questionService.findQuestion(answer.getQuestionId());
+        question.setAnswer(null);
+        question.setQuestionStatus(Question.QuestionStatus.QUESTION_REGISTRATION);
         answerRepository.delete(findVerifyAnswer(answerId));
     }
 
