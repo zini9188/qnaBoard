@@ -4,7 +4,6 @@ import com.qnaBoard.exception.CustomException;
 import com.qnaBoard.exception.ExceptionCode;
 import com.qnaBoard.member.entity.Member;
 import com.qnaBoard.member.service.MemberService;
-import com.qnaBoard.question.SortType;
 import com.qnaBoard.question.entity.Question;
 import com.qnaBoard.question.repository.QuestionRepository;
 import org.springframework.data.domain.Page;
@@ -67,7 +66,7 @@ public class QuestionService {
     }
 
     public Page<Question> findQuestions(int page, int size, String type) {
-        SortType sortType = SortType.valueOf(type);
+        Question.SortType sortType = Question.SortType.valueOf(type);
         Sort sort = Sort.by(sortType.getDirection(), sortType.getColumn());
         return questionRepository.findAllByMember_MemberStatus(PageRequest.of(page, size, sort), Member.MemberStatus.MEMBER_ACTIVE);
     }
@@ -80,7 +79,6 @@ public class QuestionService {
 
     private void verifyQuestion(Question question) {
         Member member = memberService.findMember(question.getMember().getMemberId());
-        isEqualWriter(question.getMember().getMemberId(), member.getMemberId());
         isDeleted(question.getQuestionStatus());
         isAnswered(question.getQuestionStatus());
         member.addQuestion(question);
@@ -97,13 +95,6 @@ public class QuestionService {
     private static void isDeleted(Question.QuestionStatus questionStatus) {
         if (questionStatus.equals(Question.QuestionStatus.QUESTION_DELETE)) {
             throw new CustomException(ExceptionCode.DELETED_QUESTION);
-        }
-    }
-
-    private static void isEqualWriter(long questionId, long memberId) {
-        // TODO Spring Security 적용 이후 변경
-        if (questionId != memberId) {
-            throw new CustomException(ExceptionCode.NOT_AUTHOR_QUESTION);
         }
     }
 

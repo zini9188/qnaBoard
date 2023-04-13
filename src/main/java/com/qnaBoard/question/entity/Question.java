@@ -7,6 +7,7 @@ import com.qnaBoard.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -67,5 +68,22 @@ public class Question extends BaseEntity {
         Access(String status) {
             this.status = status;
         }
+    }
+    @Getter
+    public enum SortType {
+        NEWEST("createAt", Sort.Direction.DESC),
+        OLDEST("createAt", Sort.Direction.ASC),
+        MOST_LIKE("likes", Sort.Direction.DESC),
+        LESS_LIKE("likes", Sort.Direction.ASC),
+        MOST_VIEW("view", Sort.Direction.DESC),
+        LESS_VIEW("view", Sort.Direction.ASC);
+
+        SortType(String column, Sort.Direction direction) {
+            this.column = column;
+            this.direction = direction;
+        }
+
+        private final String column;
+        private final Sort.Direction direction;
     }
 }
