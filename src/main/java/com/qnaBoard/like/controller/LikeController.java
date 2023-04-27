@@ -1,6 +1,7 @@
 package com.qnaBoard.like.controller;
 
 import com.qnaBoard.like.dto.LikeDto;
+import com.qnaBoard.like.entity.Like;
 import com.qnaBoard.like.mapper.LikeMapper;
 import com.qnaBoard.like.service.LikeService;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import static com.qnaBoard.utils.Constant.DEFAULT_LIKE_URI;
 @RestController
 @RequestMapping(DEFAULT_LIKE_URI)
 public class LikeController {
+
     private final LikeService likeService;
     private final LikeMapper likeMapper;
 
@@ -24,10 +26,10 @@ public class LikeController {
     }
 
     @PostMapping
-    public ResponseEntity likeQuestion(@RequestBody LikeDto.Post post) {
+    public ResponseEntity<Like> likeQuestion(@RequestBody LikeDto.Post post) {
         likeService.addLike(likeMapper.LikeDtoPostToLike(post));
         URI uri = UriComponentsBuilder.newInstance().build(DEFAULT_LIKE_URI);
-        return ResponseEntity.ok(uri);
+        return ResponseEntity.created(uri).build();
     }
 
     @DeleteMapping("/{like-id}")

@@ -20,6 +20,7 @@ import static com.qnaBoard.utils.Constant.DEFAULT_ANSWER_URI;
 @RestController
 @RequestMapping("/answers")
 public class AnswerController {
+
     private final AnswerService answerService;
     private final AnswerMapper answerMapper;
 
@@ -29,15 +30,15 @@ public class AnswerController {
     }
 
     @PostMapping
-    public ResponseEntity postAnswer(@RequestBody AnswerDto.Post answerDtoPost) {
+    public ResponseEntity<Answer> postAnswer(@RequestBody AnswerDto.Post answerDtoPost) {
         answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerDtoPost));
         URI uri = UriComponentsBuilder.newInstance().build(DEFAULT_ANSWER_URI);
         return ResponseEntity.created(uri).build();
     }
 
     @PatchMapping("/{answer-id}")
-    public ResponseEntity patchAnswer(@PathVariable("answer-id") @Positive long answerId,
-                                      @RequestBody AnswerDto.Patch answerDtoPatch) {
+    public ResponseEntity<SingleResponseDto<AnswerDto.Response>> patchAnswer(@PathVariable("answer-id") @Positive long answerId,
+                                                                             @RequestBody AnswerDto.Patch answerDtoPatch) {
         answerDtoPatch.setAnswerId(answerId);
         Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerDtoPatch));
         AnswerDto.Response response = answerMapper.answerToAnswerDtoResponse(answer);
@@ -45,22 +46,22 @@ public class AnswerController {
     }
 
     @GetMapping("/{answer-id}")
-    public ResponseEntity getAnswer(@PathVariable("answer-id") @Positive long answerId) {
+    public ResponseEntity<SingleResponseDto<AnswerDto.Response>> getAnswer(@PathVariable("answer-id") @Positive long answerId) {
         Answer answer = answerService.findAnswer(answerId);
         AnswerDto.Response response = answerMapper.answerToAnswerDtoResponse(answer);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @GetMapping
-    public ResponseEntity getAnswers(@RequestParam @Positive int page,
-                                     @RequestParam @Positive int size) {
+    public ResponseEntity<MultiResponseDto<AnswerDto.Response>> getAnswers(@RequestParam @Positive int page,
+                                                                           @RequestParam @Positive int size) {
         Page<Answer> answerPage = answerService.findAnswers(page - 1, size);
         List<AnswerDto.Response> responses = answerMapper.answersToAnswerDtoResponses(answerPage.getContent());
         return ResponseEntity.ok(new MultiResponseDto<>(responses, answerPage));
     }
 
     @DeleteMapping("/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("answer-id") @Positive long answerId) {
+    public ResponseEntity<Answer> deleteAnswer(@PathVariable("answer-id") @Positive long answerId) {
         answerService.deleteAnswer(answerId);
         return ResponseEntity.noContent().build();
     }

@@ -23,6 +23,7 @@ import static com.qnaBoard.utils.Constant.DEFAULT_MEMBER_URI;
 @Validated
 @RequestMapping("/members")
 public class MemberController {
+
     private final MemberService memberService;
     private final MemberMapper memberMapper;
 
@@ -32,15 +33,15 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post postDto) {
+    public ResponseEntity<Member> postMember(@Valid @RequestBody MemberDto.Post postDto) {
         memberService.createMember(memberMapper.memberDtoPostToMember(postDto));
         URI uri = UriComponentsBuilder.newInstance().build(DEFAULT_MEMBER_URI);
         return ResponseEntity.created(uri).build();
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-                                      @Valid @RequestBody MemberDto.Patch patchDto) {
+    public ResponseEntity<SingleResponseDto<MemberDto.Response>> patchMember(@PathVariable("member-id") @Positive long memberId,
+                                                                             @Valid @RequestBody MemberDto.Patch patchDto) {
         patchDto.setMemberId(memberId);
         Member member = memberService.updateMember(memberMapper.memberDtoPatchToMember(patchDto));
         MemberDto.Response response = memberMapper.memberToMemberDtoResponse(member);
@@ -48,22 +49,22 @@ public class MemberController {
     }
 
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
+    public ResponseEntity<SingleResponseDto<MemberDto.Response>> getMember(@PathVariable("member-id") @Positive long memberId) {
         Member member = memberService.findMember(memberId);
         MemberDto.Response response = memberMapper.memberToMemberDtoResponse(member);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @GetMapping
-    public ResponseEntity getMembers(@RequestParam @Positive int page,
-                                     @RequestParam @Positive int size) {
+    public ResponseEntity<MultiResponseDto<MemberDto.Response>> getMembers(@RequestParam @Positive int page,
+                                                                           @RequestParam @Positive int size) {
         Page<Member> memberPage = memberService.findMembers(page - 1, size);
         List<MemberDto.Response> responses = memberMapper.membersToResponseMembers(memberPage.getContent());
         return ResponseEntity.ok(new MultiResponseDto<>(responses, memberPage));
     }
 
     @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
+    public ResponseEntity<Member> deleteMember(@PathVariable("member-id") @Positive long memberId) {
         memberService.deleteMember(memberId);
         return ResponseEntity.noContent().build();
     }
