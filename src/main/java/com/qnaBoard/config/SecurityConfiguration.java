@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 @Configuration
 public class SecurityConfiguration {
+
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
 
@@ -37,16 +38,19 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .headers().frameOptions().sameOrigin()
+                .headers().frameOptions().disable()
                 .and()
+
                 .csrf().disable()
                 .cors(Customizer.withDefaults())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new CustomFilterConfigurer())
                 .and()
+
                 .authorizeRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/*/members").permitAll()
                         .antMatchers(HttpMethod.PATCH, "/*/members/**").hasRole("USER")
@@ -54,9 +58,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.GET, "/*/members/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/*/members/**").hasRole("USER")
                         .antMatchers("/answers/**").hasRole("ADMIN")
-                        .antMatchers("/questions/**").authenticated()
-                        .antMatchers("/likes/**").authenticated()
-                        .anyRequest().permitAll());
+                        .anyRequest().authenticated());
 
         return httpSecurity.build();
     }
@@ -77,6 +79,7 @@ public class SecurityConfiguration {
     }
 
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
