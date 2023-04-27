@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface LikeMapper {
+
     default Like LikeDtoPostToLike(LikeDto.Post post) {
         Member member = new Member();
         Question question = new Question();

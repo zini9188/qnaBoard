@@ -20,6 +20,7 @@ import static com.qnaBoard.utils.Constant.DEFAULT_QUESTION_URI;
 @RestController
 @RequestMapping("/questions")
 public class QuestionController {
+
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
 
@@ -29,14 +30,14 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity postQuestion(@RequestBody QuestionDto.Post postDto) {
+    public ResponseEntity<Question> postQuestion(@RequestBody QuestionDto.Post postDto) {
         questionService.createQuestion(questionMapper.questionPostDtoToQuestion(postDto));
         URI uri = UriComponentsBuilder.newInstance().build(DEFAULT_QUESTION_URI);
         return ResponseEntity.created(uri).build();
     }
 
     @PatchMapping("/{question-id}")
-    public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
+    public ResponseEntity<SingleResponseDto<QuestionDto.Response>> patchQuestion(@PathVariable("question-id") @Positive long questionId,
                                         @RequestBody QuestionDto.Patch patchDto) {
         Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(patchDto, questionId));
         QuestionDto.Response response = questionMapper.questionToQuestionDtoResponse(question);
@@ -44,14 +45,14 @@ public class QuestionController {
     }
 
     @GetMapping("/{question-id}")
-    public ResponseEntity getQuestion(@PathVariable("question-id") @Positive long questionId) {
+    public ResponseEntity<SingleResponseDto<QuestionDto.Response>> getQuestion(@PathVariable("question-id") @Positive long questionId) {
         Question question = questionService.findQuestion(questionId);
         QuestionDto.Response response = questionMapper.questionToQuestionDtoResponse(question);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @GetMapping
-    public ResponseEntity getQuestions(@RequestParam @Positive int page,
+    public ResponseEntity<MultiResponseDto<QuestionDto.Response>> getQuestions(@RequestParam @Positive int page,
                                        @RequestParam @Positive int size,
                                        @RequestParam @Positive String type) {
         Page<Question> questionPage = questionService.findQuestions(page - 1, size, type);
@@ -60,7 +61,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(@PathVariable("question-id") @Positive long questionId) {
+    public ResponseEntity<Question> deleteQuestion(@PathVariable("question-id") @Positive long questionId) {
         questionService.deleteQuestion(questionId);
         return ResponseEntity.noContent().build();
     }

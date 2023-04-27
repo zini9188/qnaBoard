@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Service
 public class LikeService {
+
     private final MemberService memberService;
     private final QuestionService questionService;
     private final LikeRepository likeRepository;

@@ -18,6 +18,7 @@ import java.util.Map;
 
 @Component
 public class JwtTokenizer {
+
     @Getter
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -85,6 +86,4 @@ public class JwtTokenizer {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
-
 }

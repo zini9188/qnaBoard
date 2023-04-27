@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 
 public class MemberDto {
+
     @Getter
     @AllArgsConstructor
     public static class Post {

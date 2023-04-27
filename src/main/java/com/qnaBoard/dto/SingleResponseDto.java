@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class SingleResponseDto <T>{
+
     T data;
 
     public SingleResponseDto(T data) {

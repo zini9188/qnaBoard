@@ -5,7 +5,6 @@ import com.qnaBoard.auth.dto.LoginDto;
 import com.qnaBoard.auth.jwt.JwtTokenizer;
 import com.qnaBoard.member.entity.Member;
 import lombok.SneakyThrows;
-import lombok.extern.java.Log;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
 

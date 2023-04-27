@@ -8,6 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 public class QuestionDto {
+
     @Getter
     @AllArgsConstructor
     public static class Post {

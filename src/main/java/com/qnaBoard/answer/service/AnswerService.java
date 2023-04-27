@@ -12,10 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.qnaBoard.utils.Constant.DEFAULT_ADMIN_EMAIL;
-
 @Service
 public class AnswerService {
+
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
 

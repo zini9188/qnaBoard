@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 public class Answer extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;

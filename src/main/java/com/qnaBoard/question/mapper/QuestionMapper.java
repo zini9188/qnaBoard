@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
+
     default Question questionPostDtoToQuestion(QuestionDto.Post questionPostDto) {
         if (questionPostDto == null) {
             return null;

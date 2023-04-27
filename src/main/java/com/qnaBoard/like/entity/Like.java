@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity(name = "LIKES")
 @Getter
 @Setter
 @NoArgsConstructor
 public class Like extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;

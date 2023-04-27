@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class LikeDto {
+
     @Getter
     @AllArgsConstructor
     public static class Post{

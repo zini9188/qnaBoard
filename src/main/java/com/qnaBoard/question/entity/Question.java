@@ -10,7 +10,6 @@ import lombok.Setter;
 import org.springframework.data.domain.Sort;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +18,7 @@ import java.util.List;
 @Setter
 @Entity
 public class Question extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
