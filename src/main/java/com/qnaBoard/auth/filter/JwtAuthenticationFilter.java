@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qnaBoard.auth.dto.LoginDto;
 import com.qnaBoard.auth.jwt.JwtTokenizer;
 import com.qnaBoard.member.entity.Member;
+import com.qnaBoard.utils.UriCreator;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,6 +52,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
+        response.setHeader("Location", UriCreator.createUri(member.getMemberId()).toString());
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
