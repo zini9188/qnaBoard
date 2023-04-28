@@ -21,7 +21,7 @@ import static com.qnaBoard.utils.Constant.DEFAULT_MEMBER_URI;
 
 @RestController
 @Validated
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 public class MemberController {
 
     private final MemberService memberService;

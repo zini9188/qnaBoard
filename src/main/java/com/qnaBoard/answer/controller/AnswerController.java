@@ -18,7 +18,7 @@ import java.util.List;
 import static com.qnaBoard.utils.Constant.DEFAULT_ANSWER_URI;
 
 @RestController
-@RequestMapping("/answers")
+@RequestMapping("/api/answers")
 public class AnswerController {
 
     private final AnswerService answerService;

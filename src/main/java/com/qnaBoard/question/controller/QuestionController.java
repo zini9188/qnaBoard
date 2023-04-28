@@ -18,7 +18,7 @@ import java.util.List;
 import static com.qnaBoard.utils.Constant.DEFAULT_QUESTION_URI;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/api/questions")
 public class QuestionController {
 
     private final QuestionService questionService;

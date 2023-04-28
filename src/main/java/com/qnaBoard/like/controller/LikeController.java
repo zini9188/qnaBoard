@@ -14,7 +14,7 @@ import java.net.URI;
 import static com.qnaBoard.utils.Constant.DEFAULT_LIKE_URI;
 
 @RestController
-@RequestMapping(DEFAULT_LIKE_URI)
+@RequestMapping("/api/likes")
 public class LikeController {
 
     private final LikeService likeService;
