@@ -10,5 +10,9 @@ public class LikeDto {
     public static class Post{
         long memberId;
         long questionId;
+
+        public void addQuestionId(Long questionId) {
+            this.questionId = questionId;
+        }
     }
 }

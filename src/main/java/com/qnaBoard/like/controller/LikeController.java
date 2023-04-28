@@ -6,15 +6,13 @@ import com.qnaBoard.like.mapper.LikeMapper;
 import com.qnaBoard.like.service.LikeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.constraints.Positive;
 import java.net.URI;
 
-import static com.qnaBoard.utils.Constant.DEFAULT_LIKE_URI;
 
 @RestController
-@RequestMapping("/api/likes")
+@RequestMapping("/api")
 public class LikeController {
 
     private final LikeService likeService;
@@ -25,16 +23,17 @@ public class LikeController {
         this.likeMapper = likeMapper;
     }
 
-    @PostMapping
-    public ResponseEntity<Like> likeQuestion(@RequestBody LikeDto.Post post) {
+    @PostMapping("/questions/{question-id}/likes")
+    public ResponseEntity<Like> likeQuestion(@PathVariable("question-id") Long questionId,
+                                             @RequestBody LikeDto.Post post) {
+        post.addQuestionId(questionId);
         likeService.addLike(likeMapper.LikeDtoPostToLike(post));
-        URI uri = UriComponentsBuilder.newInstance().build(DEFAULT_LIKE_URI);
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{like-id}")
-    public void deleteLike(@PathVariable("like-id") @Positive long likeId,
-                           @RequestParam @Positive long questionId) {
-        likeService.delete(likeId, questionId);
+    @DeleteMapping("/questions/{question-id}/likes/{member-id}")
+    public void deleteLike(@PathVariable("member-id") @Positive long memberId,
+                           @PathVariable("question-id") Long questionId) {
+        likeService.delete(memberId, questionId);
     }
 }

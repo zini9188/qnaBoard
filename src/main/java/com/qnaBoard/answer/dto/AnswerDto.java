@@ -13,6 +13,10 @@ public class AnswerDto {
     public static class Post {
         private Long questionId;
         private String content;
+
+        public void addQuestionId(Long questionId) {
+            this.questionId = questionId;
+        }
     }
 
     @Getter
@@ -21,7 +25,8 @@ public class AnswerDto {
         private Long answerId;
         private Long questionId;
         private String content;
-        public void setAnswerId(long answerId){
+
+        public void setAnswerId(long answerId) {
             this.answerId = answerId;
         }
     }

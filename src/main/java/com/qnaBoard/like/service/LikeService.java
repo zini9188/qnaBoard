@@ -33,13 +33,13 @@ public class LikeService {
         likeRepository.save(like);
     }
 
-    public void delete(long likeId, long questionId) {
+    public void delete(long memberId, long questionId) {
         questionService.findQuestion(questionId);
-        likeRepository.delete(findVerifyLike(likeId));
+        likeRepository.delete(findVerifyLike(memberId));
     }
 
-    private Like findVerifyLike(long likeId) {
-        Optional<Like> optionalLike = likeRepository.findById(likeId);
+    private Like findVerifyLike(long memberId) {
+        Optional<Like> optionalLike = likeRepository.findByMember_MemberId(memberId);
         return optionalLike.orElseThrow(() ->
                 new CustomException(ExceptionCode.LIKE_NOT_FOUND));
     }
