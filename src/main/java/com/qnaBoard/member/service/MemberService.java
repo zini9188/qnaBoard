@@ -37,7 +37,8 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, Member requestMember) {
+        verifySameMember(member, requestMember);
         Member findMember = findVerifyMember(member.getMemberId());
         Optional.ofNullable(member.getPassword())
                 .ifPresent(findMember::setPassword);
@@ -58,8 +59,9 @@ public class MemberService {
         return memberRepository.findAll(PageRequest.of(page, size));
     }
 
-    public void deleteMember(long memberId) {
+    public void deleteMember(long memberId, Member member) {
         Member findMember = findVerifyMember(memberId);
+        verifySameMember(findMember, member);
         findMember.setMemberStatus(Member.MemberStatus.MEMBER_DISABLE);
         memberRepository.save(findMember);
     }
@@ -74,5 +76,11 @@ public class MemberService {
         Optional<Member> member = memberRepository.findById(memberId);
         return member.orElseThrow(() ->
                 new CustomException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    public void verifySameMember(Member member, Member requestMember) {
+        if (!member.getEmail().equals(requestMember.getEmail())) {
+            throw new CustomException(ExceptionCode.MEMBER_NOT_MATCH);
+        }
     }
 }
