@@ -26,7 +26,7 @@ public class AnswerDto {
         private Long questionId;
         private String content;
 
-        public void setAnswerId(long answerId) {
+        public void addAnswerId(long answerId) {
             this.answerId = answerId;
         }
     }

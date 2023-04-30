@@ -16,6 +16,10 @@ public class QuestionDto {
         private String title;
         private String content;
         private Question.Access access;
+
+        public void addMemberId(Long memberId) {
+            this.memberId = memberId;
+        }
     }
 
     @Getter
@@ -26,6 +30,10 @@ public class QuestionDto {
         private String title;
         private String content;
         private Question.Access access;
+
+        public void addMemberId(Long memberId) {
+            this.memberId = memberId;
+        }
     }
 
     @Getter

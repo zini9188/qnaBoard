@@ -4,10 +4,13 @@ import com.qnaBoard.answer.dto.AnswerDto;
 import com.qnaBoard.answer.entity.Answer;
 import com.qnaBoard.answer.mapper.AnswerMapper;
 import com.qnaBoard.answer.service.AnswerService;
+import com.qnaBoard.auth.userdetails.MemberPrincipal;
 import com.qnaBoard.dto.MultiResponseDto;
 import com.qnaBoard.dto.SingleResponseDto;
+import com.qnaBoard.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
@@ -29,7 +32,7 @@ public class AnswerController {
     @PatchMapping("/{answer-id}")
     public ResponseEntity<SingleResponseDto<AnswerDto.Response>> patchAnswer(@PathVariable("answer-id") @Positive long answerId,
                                                                              @RequestBody AnswerDto.Patch answerDtoPatch) {
-        answerDtoPatch.setAnswerId(answerId);
+        answerDtoPatch.addAnswerId(answerId);
         Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerDtoPatch));
         AnswerDto.Response response = answerMapper.answerToAnswerDtoResponse(answer);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
