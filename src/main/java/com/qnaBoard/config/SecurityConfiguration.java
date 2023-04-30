@@ -14,6 +14,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,11 +29,14 @@ public class SecurityConfiguration {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final UserDetailsService userDetailsService;
 
     public SecurityConfiguration(JwtTokenizer jwtTokenizer,
-                                 CustomAuthorityUtils authorityUtils) {
+                                 CustomAuthorityUtils authorityUtils,
+                                 UserDetailsService userDetailsService) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -57,7 +61,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.GET, "/*/members").hasRole("ADMIN")
                         .antMatchers(HttpMethod.GET, "/*/members/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/*/members/**").hasRole("USER")
-                        .antMatchers("/answers/**").hasRole("ADMIN")
+                        .antMatchers("*/answers/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         return httpSecurity.build();
@@ -88,7 +92,7 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, userDetailsService, authorityUtils);
             builder.addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
