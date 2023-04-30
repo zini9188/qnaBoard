@@ -3,6 +3,7 @@ package com.qnaBoard.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qnaBoard.auth.dto.LoginDto;
 import com.qnaBoard.auth.jwt.JwtTokenizer;
+import com.qnaBoard.auth.userdetails.MemberPrincipal;
 import com.qnaBoard.member.entity.Member;
 import com.qnaBoard.utils.UriCreator;
 import lombok.SneakyThrows;
@@ -46,7 +47,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws ServletException, IOException {
-        Member member = (Member) authResult.getPrincipal();
+        MemberPrincipal memberPrincipal = (MemberPrincipal) authResult.getPrincipal();
+        Member member = memberPrincipal.getMember();
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
