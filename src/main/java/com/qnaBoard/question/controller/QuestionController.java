@@ -4,6 +4,7 @@ import com.qnaBoard.answer.dto.AnswerDto;
 import com.qnaBoard.answer.entity.Answer;
 import com.qnaBoard.answer.mapper.AnswerMapper;
 import com.qnaBoard.answer.service.AnswerService;
+import com.qnaBoard.auth.userdetails.MemberPrincipal;
 import com.qnaBoard.dto.MultiResponseDto;
 import com.qnaBoard.dto.SingleResponseDto;
 import com.qnaBoard.question.dto.QuestionDto;
@@ -13,6 +14,7 @@ import com.qnaBoard.question.service.QuestionService;
 import com.qnaBoard.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
@@ -38,15 +40,18 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<Question> postQuestion(@RequestBody QuestionDto.Post postDto) {
+    public ResponseEntity<Question> postQuestion(@AuthenticationPrincipal MemberPrincipal memberPrincipal,
+                                                 @RequestBody QuestionDto.Post postDto) {
+        postDto.addMemberId(memberPrincipal.getMember().getMemberId());
         Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(postDto));
         return ResponseEntity.created(UriCreator.createUri(question.getQuestionId())).build();
     }
 
     @PatchMapping("/{question-id}")
-    public ResponseEntity<SingleResponseDto<QuestionDto.Response>> patchQuestion(@PathVariable("question-id") @Positive long questionId,
+    public ResponseEntity<SingleResponseDto<QuestionDto.Response>> patchQuestion(@AuthenticationPrincipal MemberPrincipal memberPrincipal,
+                                                                                 @PathVariable("question-id") @Positive long questionId,
                                                                                  @RequestBody QuestionDto.Patch patchDto) {
-        Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(patchDto, questionId));
+        Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(patchDto, questionId), memberPrincipal.getMember());
         QuestionDto.Response response = questionMapper.questionToQuestionDtoResponse(question);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }

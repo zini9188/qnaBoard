@@ -30,8 +30,9 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-    public Question updateQuestion(Question question) {
+    public Question updateQuestion(Question question, Member member) {
         Question findQuestion = findVerifyQuestion(question.getQuestionId());
+        memberService.verifySameMember(findQuestion.getMember(), member);
         isUpdatable(findQuestion.getQuestionStatus());
         Optional.ofNullable(question.getTitle())
                 .ifPresent(findQuestion::setTitle);

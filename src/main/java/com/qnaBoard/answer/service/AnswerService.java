@@ -58,7 +58,7 @@ public class AnswerService {
         question.setQuestionId(answer.getQuestionId());
         question.setQuestionStatus(Question.QuestionStatus.QUESTION_ANSWERED);
         question.setAnswer(answer);
-        questionService.updateQuestion(question);
+        questionService.updateQuestion(question, question.getMember());
         answer.setAccess(question.getAccess());
     }
 
